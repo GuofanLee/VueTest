@@ -22,7 +22,7 @@
     姓：<input type="text" placeholder="First Name" v-model="firstName"><br/>
     名：<input type="text" placeholder="Last Name" v-model="lastName"><br/>
     姓名1(单向)：<input type="text" placeholder="Full Name1" v-model="fullName1"><br/>
-    姓名2(单向)：<input type="text" placeholder="Full Name2"><br/>
+    姓名2(单向)：<input type="text" placeholder="Full Name2" v-model="fullName2"><br/>
     姓名3(双向)：<input type="text" placeholder="Full Name3"><br/>
 </div>
 
@@ -33,16 +33,53 @@
         data: {
             firstName: 'A',
             lastName: 'B',
+            fullName2: 'A B',
         },
 
+        /**
+         * 配置计算属性
+         */
         computed: {
-            //计算属性中的一个方法，方法名即为属性名，方法返回值即为属性值
-            //执行时机：1、初始化显示；2、相关属性值发生变化
+            /**
+             * 计算属性中的一个方法：方法名即为属性名，方法返回值即为属性值
+             * 执行时机：1、初始化显示；2、相关属性值发生变化
+             */
             fullName1() {
                 return this.firstName + ' ' + this.lastName;
             }
         },
+
+        /**
+         * 配置监视属性
+         */
+        watch: {
+          /**
+           * 监视firstName属性
+           * firstName为被监视的属性
+           * function为被监视的属性值发生变化后的回调函数
+           *     - function可以有两个参数，也可以只有一个参数
+           *         - 如果写两个参数，则第一个参数为被监视的属性的新值，第二个参数为被监视的属性的旧值
+           *         - 如果写一个参数，则这个参数就是被监视的属性的新值
+           * 监视属性的回调函数的执行时机：1、初始化显示；2、被监视属性值发生变化
+           *
+           * @param newVal
+           * @param oldVal
+           */
+          firstName: function(newVal, oldVal) {
+            this.fullName2 = newVal + ' ' + this.lastName;
+          }
+        },
+
     });
+
+    /**
+     * 监视lastName属性
+     * vm的监视方法
+     * 所有vm实例的属性和方法都以 $ 开头
+     */
+    vm.$watch('lastName', function (newVal, oldVal) {
+        this.fullName2 = this.firstName + ' ' + newVal;
+    })
 </script>
 
 </body>
